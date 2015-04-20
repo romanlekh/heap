@@ -12,10 +12,17 @@ void SetMemory(void *ptr1, void *ptr2);
 // returning a pointer to the beginning of the block.
 void* MemLoc(size_t mem_size);
 
-//Deallocate memory block.
+// Deallocate memory block.
 // A block of memory previously allocated by a call to MemLoc
 // is deallocated, making it available again for further allocations.
 void FreeMem(void *ptr);
+
+// Show memory map with pointers of user-memory start
+// and how many bytes are used.
+void MapMemory();
+
+
+
 
 
 #endif // HEAP_H_INCLUDED

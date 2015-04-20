@@ -65,20 +65,6 @@ char* UniteFreeMem(size_t mem_size);
 
 void* MemLoc(size_t mem_size)
 {
-    /*// In first case looking already free memory (second-hand memory)
-    Memory_info *temp_res_next = gp_res_next;
-    Memory_info *temp_res_end = (Memory_info*)gp_res_end;
-    while( temp_res_next < temp_res_end )
-    {
-        if( temp_res_next->bool_use == 0 &&
-           temp_res_next->mem_length == mem_size )
-        {
-            temp_res_next->bool_use = 1;
-            return temp_res_next->res_ptr;
-        }
-        ++temp_res_next;
-    }*/
-
     // In first case looking already free memory (second-hand memory);
     // try to unite adjacent memory blocks
 
@@ -87,7 +73,6 @@ void* MemLoc(size_t mem_size)
     if( ptr_loc )
         return (void*)ptr_loc;
 
-    printf("\nSECOND\n");
     // Second case - no free second-hand memory
 
     // Check if enough free reserve-memory
@@ -135,8 +120,6 @@ char* UniteFreeMem(size_t mem_size)
             {
                 unite_start->bool_use = 1;
                 unite_start->mem_length = mem_size;
-                //while( unite_start == temp_res_next )
-                    printf("\nFIRST\n");
                 return unite_start->res_ptr;
             }
         }
@@ -171,6 +154,24 @@ void FreeMem(void *ptr)
     }
 }
 
-
+void MapMemory()
+{
+    Memory_info *temp_res_next = gp_res_next + 1;
+    Memory_info *temp_res_end = (Memory_info*)gp_res_end - 1;
+    size_t used_mem = 0;
+    size_t free_mem =  gp_res_end - gp_beg;
+    while( temp_res_end >= temp_res_next )
+    {
+        if( temp_res_end->bool_use )
+        {
+            printf("Pointer %p, bytes %i\n",
+                temp_res_end->res_ptr, temp_res_end->mem_length );
+            used_mem += temp_res_end->mem_length;
+        }
+        --temp_res_end;
+    }
+    printf("Total used memory %i bytes\nTotal free memory %i bytes",
+           used_mem, free_mem - used_mem);
+}
 
 
