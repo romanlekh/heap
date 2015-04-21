@@ -118,13 +118,23 @@ char* UniteFreeMem(size_t mem_size)
             cout_prev_mem += temp_res_end->mem_length;
             if( cout_prev_mem == mem_size )
             {
+                // Set Memory_info
                 unite_start->bool_use = 1;
                 unite_start->mem_length = mem_size;
+                // Block Memory_info
+                while( temp_res_end < unite_start )
+                {
+                    temp_res_end->bool_use = 2;
+                    temp_res_end->mem_length = 0;
+                    temp_res_end->res_ptr = NULL;
+                    ++temp_res_end;
+                }
                 return unite_start->res_ptr;
             }
         }
         else
         {
+            // Clear temp variables and set new check-point for unite_start
             cout_bool_use = 0;
             cout_prev_mem = 0;
             unite_start = temp_res_end - 1;
@@ -162,7 +172,7 @@ void MapMemory()
     size_t free_mem =  gp_res_end - gp_beg;
     while( temp_res_end >= temp_res_next )
     {
-        if( temp_res_end->bool_use )
+        if( temp_res_end->bool_use == 1 )
         {
             printf("Pointer %p, bytes %i\n",
                 temp_res_end->res_ptr, temp_res_end->mem_length );
