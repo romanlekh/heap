@@ -162,6 +162,14 @@ void FreeMem(void *ptr)
         }
         ++temp_res_next;
     }
+    // Clear marked info_blocks
+    while( temp_res_next->bool_use == 2 )
+    {
+        temp_res_next->bool_use == 2;
+        --temp_res_next;
+    }
+
+
 }
 
 void MapMemory()
